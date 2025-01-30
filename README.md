@@ -11,7 +11,7 @@ Kick Points is a project that allows users to earn and manage points through API
 - **Headers:**
   ```json
   {
-    "Authorization": "Bearer YOUR_API_KEY"
+    "api_key": "YOUR_API_KEY"
   }
   ```
 - **Response:**
@@ -22,8 +22,8 @@ Kick Points is a project that allows users to earn and manage points through API
         "id": 1,
         "username": "user1",
         "points": 100,
-        "updated_at": "2023-10-01T12:00:00Z",
-        "created_at": "2023-10-01T12:00:00Z"
+        "updatedAt": "2023-10-01T12:00:00Z",
+        "createdAt": "2023-10-01T12:00:00Z"
       }
     ]
   }
@@ -36,7 +36,7 @@ Kick Points is a project that allows users to earn and manage points through API
 - **Headers:**
   ```json
   {
-    "Authorization": "Bearer YOUR_API_KEY"
+    "api_key": "YOUR_API_KEY"
   }
   ```
 - **Request Body:**
@@ -60,7 +60,7 @@ Kick Points is a project that allows users to earn and manage points through API
 - **Headers:**
   ```json
   {
-    "Authorization": "Bearer YOUR_API_KEY"
+    "api_key": "YOUR_API_KEY"
   }
   ```
 - **Request Body:**
@@ -85,7 +85,7 @@ Kick Points is a project that allows users to earn and manage points through API
 - **Headers:**
   ```json
   {
-    "Authorization": "Bearer YOUR_API_KEY"
+    "api_key": "YOUR_API_KEY"
   }
   ```
 - **Response:**
