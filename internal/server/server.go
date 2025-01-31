@@ -13,17 +13,17 @@ import (
 )
 
 type Server struct {
-	port int
-
-	db database.Service
+	port   int
+	apiKey string
+	db     database.Service
 }
 
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	NewServer := &Server{
-		port: port,
-
-		db: database.New(),
+		port:   port,
+		db:     database.New(),
+		apiKey: os.Getenv("API_KEY"),
 	}
 
 	// Declare Server config

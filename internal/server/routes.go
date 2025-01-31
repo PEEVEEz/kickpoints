@@ -7,6 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type PointsRequest struct {
+	Username string `json:"username"`
+	Points   int    `json:"points"`
+}
+
 func (s *Server) RegisterRoutes() http.Handler {
 	r := gin.Default()
 
@@ -16,12 +21,27 @@ func (s *Server) RegisterRoutes() http.Handler {
 		AllowHeaders: []string{"Accept", "api-key", "Content-Type"},
 	}))
 
+	r.Use(s.apiKeyMiddleware())
 	r.GET("/points", s.getAllPointsHandler)
 	r.POST("/points/add", s.addPointsHandler)
 	r.GET("/points/:username", s.getPointsHandler)
 	r.POST("/points/remove", s.removePointsHandler)
 
 	return r
+}
+
+func (s *Server) apiKeyMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		headerValue := c.GetHeader("api-key")
+
+		if headerValue != s.apiKey {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized - Missing or invalid apikey"})
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
 }
 
 func (s *Server) getAllPointsHandler(c *gin.Context) {
@@ -35,10 +55,7 @@ func (s *Server) getAllPointsHandler(c *gin.Context) {
 }
 
 func (s *Server) addPointsHandler(c *gin.Context) {
-	var req struct {
-		Username string `json:"username"`
-		Points   int    `json:"points"`
-	}
+	var req PointsRequest
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -56,10 +73,7 @@ func (s *Server) addPointsHandler(c *gin.Context) {
 }
 
 func (s *Server) removePointsHandler(c *gin.Context) {
-	var req struct {
-		Username string `json:"username"`
-		Points   int    `json:"points"`
-	}
+	var req PointsRequest
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
