@@ -58,14 +58,14 @@ func (s *Server) addPointsHandler(c *gin.Context) {
 	var req PointsRequest
 
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
 
 	newAmount, err := s.db.AddPoints(req.Username, req.Points)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add points"})
 		return
 	}
 
@@ -76,13 +76,13 @@ func (s *Server) removePointsHandler(c *gin.Context) {
 	var req PointsRequest
 
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
 
 	success, newAmount, err := s.db.RemovePoints(req.Username, req.Points)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to remove points"})
 		return
 	}
 
@@ -98,7 +98,7 @@ func (s *Server) getPointsHandler(c *gin.Context) {
 
 	points, err := s.db.GetPoints(username)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user points"})
 		return
 	}
 
