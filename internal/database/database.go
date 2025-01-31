@@ -70,11 +70,11 @@ func New() Service {
 
 // User represents the user table in the database.
 type User struct {
-	ID        uint      `db:"id"`
-	Username  string    `db:"username"`
-	Points    int       `db:"points"`
-	UpdatedAt time.Time `db:"updated_at"`
-	CreatedAt time.Time `db:"created_at"`
+	ID        uint      `db:"id" json:"id"`
+	Username  string    `db:"username" json:"username"`
+	Points    int       `db:"points" json:"points"`
+	UpdatedAt time.Time `db:"updated_at" json:"updatedAt"`
+	CreatedAt time.Time `db:"created_at" json:"createdAt"`
 }
 
 // migrate creates the users table if it doesn't exist.
@@ -110,8 +110,7 @@ func (s *service) GetAllUsers() ([]User, error) {
 
 	for rows.Next() {
 		var user User
-		err := rows.Scan(&user.ID, &user.Username, &user.Points, &user.UpdatedAt, &user.CreatedAt)
-		if err != nil {
+		if err := rows.Scan(&user.ID, &user.Username, &user.Points, &user.UpdatedAt, &user.CreatedAt); err != nil {
 			return nil, err
 		}
 

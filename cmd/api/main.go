@@ -67,52 +67,25 @@ func main() {
 // Kick websocket client stuff
 
 type Identity struct {
-	Color  string  `json:"color"`
 	Badges []Badge `json:"badges"`
 }
 
 type Badge struct {
-	Type  string `json:"type"`
-	Text  string `json:"text"`
-	Count int    `json:"count,omitempty"`
+	Type string `json:"type"`
 }
 
 type Sender struct {
-	ID       int      `json:"id"`
-	Username string   `json:"username"`
 	Slug     string   `json:"slug"`
 	Identity Identity `json:"identity"`
 }
 
-type OriginalSender struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-}
-
-type OriginalMessage struct {
-	ID      string `json:"id"`
-	Content string `json:"content"`
-}
-
-type Metadata struct {
-	OriginalSender  OriginalSender  `json:"original_sender"`
-	OriginalMessage OriginalMessage `json:"original_message"`
-}
-
 type Data struct {
-	ID         string   `json:"id"`
-	ChatroomID int      `json:"chatroom_id"`
-	Content    string   `json:"content"`
-	Type       string   `json:"type"`
-	CreatedAt  string   `json:"created_at"`
-	Sender     Sender   `json:"sender"`
-	Metadata   Metadata `json:"metadata"`
+	Sender Sender `json:"sender"`
 }
 
 type Message struct {
-	Event   string          `json:"event"`
-	Data    json.RawMessage `json:"data"`
-	Channel string          `json:"channel"`
+	Event string          `json:"event"`
+	Data  json.RawMessage `json:"data"`
 }
 
 func isSubscriber(tags []Badge) bool {
