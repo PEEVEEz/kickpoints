@@ -99,7 +99,7 @@ func isSubscriber(tags []Badge) bool {
 
 func connectWebSocket() {
 	var url = os.Getenv("KICK_WEBSOCKET_URL")
-	var channel = os.Getenv("KICK_CHANNEL")
+	var channelId = os.Getenv("KICK_CHANNEL_ID")
 
 	headers := http.Header{}
 	headers.Set("Origin", "https://kick.com")
@@ -114,7 +114,7 @@ func connectWebSocket() {
 	subscribeMessage := map[string]interface{}{
 		"event": "pusher:subscribe",
 		"data": map[string]string{
-			"channel": fmt.Sprintf("chatrooms.%s.v2", channel),
+			"channel": fmt.Sprintf("chatrooms.%s.v2", channelId),
 		},
 	}
 
@@ -130,7 +130,7 @@ func connectWebSocket() {
 		return
 	}
 
-	fmt.Printf("Connected to channel: %s\n", channel)
+	fmt.Printf("Connected to channel: %s\n", channelId)
 
 	for {
 		_, message, err := conn.ReadMessage()
