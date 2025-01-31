@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -99,7 +100,7 @@ func isSubscriber(tags []Badge) bool {
 
 func connectWebSocket() {
 	var url = os.Getenv("KICK_WEBSOCKET_URL")
-	var channelId = os.Getenv("KICK_CHANNEL_ID")
+	// var channelId = os.Getenv("KICK_CHANNEL_ID")
 
 	headers := http.Header{}
 	headers.Set("Origin", "https://kick.com")
@@ -111,26 +112,30 @@ func connectWebSocket() {
 	}
 	defer conn.Close()
 
-	subscribeMessage := map[string]interface{}{
-		"event": "pusher:subscribe",
-		"data": map[string]string{
-			"channel": fmt.Sprintf("chatrooms.%s.v2", channelId),
-		},
-	}
+	channelIds := strings.Split(os.Getenv("KICK_CHANNEL_ID"), ",")
 
-	message, err := json.Marshal(subscribeMessage)
-	if err != nil {
-		fmt.Println("Error marshaling subscribe message:", err)
-		return
-	}
+	for _, channelId := range channelIds {
+		subscribeMessage := map[string]interface{}{
+			"event": "pusher:subscribe",
+			"data": map[string]string{
+				"channel": fmt.Sprintf("chatrooms.%s.v2", channelId),
+			},
+		}
 
-	err = conn.WriteMessage(websocket.TextMessage, message)
-	if err != nil {
-		fmt.Println("Error sending subscribe message:", err)
-		return
-	}
+		message, err := json.Marshal(subscribeMessage)
+		if err != nil {
+			fmt.Println("Error marshaling subscribe message:", err)
+			return
+		}
 
-	fmt.Printf("Connected to channel: %s\n", channelId)
+		err = conn.WriteMessage(websocket.TextMessage, message)
+		if err != nil {
+			fmt.Println("Error sending subscribe message:", err)
+			return
+		}
+
+		fmt.Printf("Connected to channel: %s\n", channelId)
+	}
 
 	for {
 		_, message, err := conn.ReadMessage()
